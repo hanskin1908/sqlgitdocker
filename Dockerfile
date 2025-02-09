@@ -1,29 +1,9 @@
-FROM mcr.microsoft.com/mssql/server:2022-latest
-
-USER root
-
-# Configuración del sistema
-RUN echo "fs.file-max=65535" >> /etc/sysctl.conf && \
-    echo "fs.aio-max-nr=1048576" >> /etc/sysctl.conf
+FROM mcr.microsoft.com/mssql/server:2019-latest
 
 ENV ACCEPT_EULA=Y
 ENV MSSQL_SA_PASSWORD=${RAILWAY_SQL_PASSWORD}
-ENV MSSQL_PID=Developer
-ENV MSSQL_TCP_PORT=${PORT}
-ENV MSSQL_MEMORY_LIMIT_MB=2048
-ENV MSSQL_TELEMETRY_ENABLED=FALSE
-
-# Crear y configurar directorios
-RUN mkdir -p /var/opt/mssql/data && \
-    mkdir -p /var/opt/mssql/log && \
-    mkdir -p /var/opt/mssql/secrets && \
-    chmod -R 777 /var/opt/mssql
-
-# Configurar límites de recursos
-RUN echo "mssql soft nofile 65535" >> /etc/security/limits.conf && \
-    echo "mssql hard nofile 65535" >> /etc/security/limits.conf
-
-USER mssql
+ENV MSSQL_PID=Express
+ENV MSSQL_MEMORY_LIMIT_MB=1024
 
 EXPOSE ${PORT}
 
